@@ -1,4 +1,4 @@
-# @mxgnus/slashcommands.js-v2
+# @mxgnus/slashcommands.js
 
 #### @mxgnus/slashcommands.js is a free easy to use slash command package for discords.js
 
