@@ -1,5 +1,5 @@
 {
-   "name": "slashcommands.js",
+   "name": "@mxgnus/slashcommands.js",
    "version": "1.0.0",
    "description": "A simple discord.js v13 slash command package",
    "main": "lib/index.js",

@@ -1,25 +1,28 @@
-# slashcommands.js-v2
+# @mxgnus/slashcommands.js-v2
 
-#### slashcommands.js is a free easy to use slash command package for discords.js
+#### @mxgnus/slashcommands.js is a free easy to use slash command package for discords.js
 
 If you find any bugs, [contact me](https://discord.mxgnus.de)
 
 ## Installation
 
-Use the package manager [npm](https://nodejs.org/en/download/) to install slashcommands.js.
+Use the package manager [npm](https://nodejs.org/en/download/) to install @mxgnus/slashcommands.js.
 
 ```bash
-npm i slashcommands.js
+npm i @mxgnus/slashcommands.js
 ```
 
 ## Create a new slashcommand
 
 ```javascript
-new (require('slashcommands.js').default)(bot /* your discord.js client */, {
-   /* options */
-}); // initialize the package
+new (require('@mxgnus/slashcommands.js').default)(
+   bot /* your discord.js client */,
+   {
+      /* options */
+   },
+); // initialize the package
 
-const { GuildSlashCommand, Slashcommand } = require('slashcommands.js');
+const { GuildSlashCommand, Slashcommand } = require('@mxgnus/slashcommands.js');
 
 // create a guild slashcommand
 new GuildSlashCommand()
@@ -38,14 +41,17 @@ new Slashcommand()
 ## Fetch slashcommands
 
 ```javascript
-new (require('slashcommands.js').default)(bot /* your discord.js client */, {
-   /* options */
-}); // initialize the package
+new (require('@mxgnus/slashcommands.js').default)(
+   bot /* your discord.js client */,
+   {
+      /* options */
+   },
+); // initialize the package
 
 const {
    fetchGuildSlashcommands,
    fetchSlashcommands,
-} = require('slashcommands.js');
+} = require('@mxgnus/slashcommands.js');
 
 // fetch all guild slashcommands
 const guildSlashCommands = await fetchGuildSlashcommands();
@@ -57,14 +63,17 @@ const slashCommands = await fetchSlashcommands();
 ## Delete slashcommands
 
 ```javascript
-new (require('slashcommands.js').default)(bot /* your discord.js client */, {
-   /* options */
-}); // initialize the package
+new (require('@mxgnus/slashcommands.js').default)(
+   bot /* your discord.js client */,
+   {
+      /* options */
+   },
+); // initialize the package
 
 const {
    deleteGuildSlashcommand,
    deleteSlashcommand,
-} = require('slashcommands.js');
+} = require('@mxgnus/slashcommands.js');
 
 // delete a guild slashcommand by name
 deleteGuildSlashcommand({
