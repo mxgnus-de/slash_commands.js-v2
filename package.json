@@ -1,14 +1,27 @@
 {
   "name": "slash_commands.js-v2",
   "version": "1.0.0",
-  "description": "",
+  "description": "Slashcommand package",
   "main": "index.js",
+  "dependencies": {
+    "tsc": "^2.0.4"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxgnus-de/slash_commands.js-v2.git"
+  },
+  "keywords": [
+    "slashcommands",
+    "discord"
+  ],
+  "author": "mxgnus",
   "license": "ISC",
-  "dependencies": {
-    "tsc": "^2.0.4"
-  }
+  "bugs": {
+    "url": "https://github.com/mxgnus-de/slash_commands.js-v2/issues"
+  },
+  "homepage": "https://github.com/mxgnus-de/slash_commands.js-v2#readme"
 }
