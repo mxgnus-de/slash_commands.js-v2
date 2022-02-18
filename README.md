@@ -15,14 +15,12 @@ npm i @mxgnus/slashcommands.js
 ## Create a new slashcommand
 
 ```javascript
-new (require('@mxgnus/slashcommands.js').default)(
-   bot /* your discord.js client */,
-   {
-      /* options */
-   },
-); // initialize the package
-
-const { GuildSlashCommand, Slashcommand } = require('@mxgnus/slashcommands.js');
+const {
+   GuildSlashCommand,
+   Slashcommand,
+   default: Slash,
+} = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
 
 // create a guild slashcommand
 new GuildSlashCommand()
@@ -41,17 +39,12 @@ new Slashcommand()
 ## Fetch slashcommands
 
 ```javascript
-new (require('@mxgnus/slashcommands.js').default)(
-   bot /* your discord.js client */,
-   {
-      /* options */
-   },
-); // initialize the package
-
 const {
    fetchGuildSlashcommands,
    fetchSlashcommands,
+   default: Slash,
 } = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
 
 // fetch all guild slashcommands
 const guildSlashCommands = await fetchGuildSlashcommands();
@@ -63,17 +56,12 @@ const slashCommands = await fetchSlashcommands();
 ## Delete slashcommands
 
 ```javascript
-new (require('@mxgnus/slashcommands.js').default)(
-   bot /* your discord.js client */,
-   {
-      /* options */
-   },
-); // initialize the package
-
 const {
    deleteGuildSlashcommand,
    deleteSlashcommand,
+   default: Slash,
 } = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
 
 // delete a guild slashcommand by name
 deleteGuildSlashcommand({
