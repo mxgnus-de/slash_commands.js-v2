@@ -1,8 +1,9 @@
 {
    "name": "slash_commands.js-v2",
    "version": "1.0.0",
-   "description": "Slashcommand package",
+   "description": "A simple discord.js v13 slash command package",
    "main": "lib/index.js",
+   "types": "lib/index.d.ts",
    "dependencies": {
       "colors": "^1.4.0",
       "discord.js": "^13.6.0",
@@ -29,12 +30,18 @@
    },
    "keywords": [
       "slashcommands",
-      "discord"
+      "discord",
+      "discord.js",
+      "slash",
+      "command"
    ],
    "author": "mxgnus",
    "license": "ISC",
    "bugs": {
       "url": "https://github.com/mxgnus-de/slash_commands.js-v2/issues"
    },
-   "homepage": "https://github.com/mxgnus-de/slash_commands.js-v2#readme"
+   "homepage": "https://github.com/mxgnus-de/slash_commands.js-v2#readme",
+   "files": [
+      "lib/**/*"
+   ]
 }
