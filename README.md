@@ -97,6 +97,10 @@ bot.on('interactionCreate', async (interaction) => {
 });
 ```
 
+## Need help?
+
+### [Discord Server](https://discord.gg/M6Tf9b2Tvt)
+
 # WARNING
 
 ## Discord takes a lot of time to create or update a slashcommand. So be patient if you add one.
