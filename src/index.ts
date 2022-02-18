@@ -4,24 +4,27 @@ import colors from 'colors';
 
 interface Options {
    debug?: boolean;
-   showVersion?: boolean;
+   guildId?: string;
 }
 
 let that: Client;
 let emitter: EventEmitter = new EventEmitter();
 const options: Options = {
    debug: false,
-   showVersion: false,
+   guildId: undefined,
 };
 
-export default class Slash {
+export class Slash {
    private client: Client;
 
    constructor(client: Client, clientOptions: Options = {}) {
       this.client = client;
       that = client;
-      options.debug = clientOptions.debug || false;
-      options.showVersion = clientOptions.showVersion || false;
+      if (clientOptions.debug) options.debug = clientOptions.debug;
+      if (clientOptions.guildId) {
+         validateGuildId(clientOptions.guildId);
+         options.guildId = clientOptions.guildId;
+      }
       debugLogger(`Slash initialized.`);
 
       if (!isReady()) {
@@ -43,6 +46,7 @@ export class GuildSlashCommand {
       if (!isInit()) {
          throw new Error('Slash command not initialized');
       }
+      if (options.guildId) this.guildId = options.guildId;
       return this;
    }
 
@@ -217,6 +221,7 @@ export async function fetchGuildSlashcommands(
    if (!isInit()) {
       throw new Error('Slash command not initialized');
    }
+   if (options.guildId) guildId = options.guildId;
    if (!guildId) {
       throw new Error('Guild ID is not set');
    }
@@ -295,7 +300,7 @@ export async function deleteGuildSlashcommand(
    if (!isInit()) {
       throw new Error('Slash command not initialized');
    }
-
+   if (options.guildId) guildId = options.guildId;
    if (!guildId) {
       throw new Error('Guild ID is not set');
    }

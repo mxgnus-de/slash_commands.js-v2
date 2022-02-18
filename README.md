@@ -18,7 +18,7 @@ npm i @mxgnus/slashcommands.js
 const {
    GuildSlashCommand,
    Slashcommand,
-   default: Slash,
+   Slash,
 } = require('@mxgnus/slashcommands.js');
 new Slash(bot /* your discord.js client */); // initialize the slash command
 
@@ -42,7 +42,7 @@ new Slashcommand()
 const {
    fetchGuildSlashcommands,
    fetchSlashcommands,
-   default: Slash,
+   Slash,
 } = require('@mxgnus/slashcommands.js');
 new Slash(bot /* your discord.js client */); // initialize the slash command
 
@@ -59,7 +59,7 @@ const slashCommands = await fetchSlashcommands();
 const {
    deleteGuildSlashcommand,
    deleteSlashcommand,
-   default: Slash,
+   Slash,
 } = require('@mxgnus/slashcommands.js');
 new Slash(bot /* your discord.js client */); // initialize the slash command
 
