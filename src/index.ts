@@ -4,11 +4,15 @@ import colors from 'colors';
 
 interface Options {
    debug?: boolean;
+   showVersion?: boolean;
 }
 
 let that: Client;
 let emitter: EventEmitter = new EventEmitter();
-let options: Options = {};
+const options: Options = {
+   debug: false,
+   showVersion: false,
+};
 
 export default class Slash {
    private client: Client;
@@ -16,7 +20,8 @@ export default class Slash {
    constructor(client: Client, clientOptions: Options = {}) {
       this.client = client;
       that = client;
-      options = clientOptions;
+      options.debug = clientOptions.debug || false;
+      options.showVersion = clientOptions.showVersion || false;
       debugLogger(`Slash initialized.`);
 
       if (!isReady()) {
