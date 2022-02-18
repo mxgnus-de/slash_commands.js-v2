@@ -1,6 +1,6 @@
 {
    "name": "slash_commands.js-v2",
-   "version": "1.0.1",
+   "version": "1.0.0",
    "description": "A simple discord.js v13 slash command package",
    "main": "lib/index.js",
    "types": "lib/index.d.ts",
@@ -22,7 +22,8 @@
       "prepublishOnly": "npm test",
       "version": "git add -A src",
       "postversion": "git push && git push --tags",
-      "build": "tsc -p tsconfig.json"
+      "build": "tsc -p tsconfig.json",
+      "test": ""
    },
    "repository": {
       "type": "git",
