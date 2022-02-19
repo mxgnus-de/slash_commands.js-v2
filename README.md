@@ -1,5 +1,7 @@
 # 🚀 Getting started
 
+## [📝 Documentation](https://slashcommands.mxgnus.de)
+
 ### Installation
 
 Use the package manager [npm](https://nodejs.org/en/download/) to install @mxgnus/slashcommands.js.
