@@ -71,6 +71,7 @@ deleteGuildSlashcommand({
 
 // delete a guild slashcommand by id
 deleteGuildSlashcommand({
+   guildId: 'your guild id',
    id: 'command id',
 });
 
