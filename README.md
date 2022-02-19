@@ -1,10 +1,6 @@
-# @mxgnus/slashcommands.js
+# 🚀 Getting started
 
-#### @mxgnus/slashcommands.js is a free easy to use slash command package for discords.js
-
-If you find any bugs, [contact me](https://discord.mxgnus.de)
-
-## Installation
+### Installation
 
 Use the package manager [npm](https://nodejs.org/en/download/) to install @mxgnus/slashcommands.js.
 
@@ -12,7 +8,7 @@ Use the package manager [npm](https://nodejs.org/en/download/) to install @mxgnu
 npm i @mxgnus/slashcommands.js
 ```
 
-## Create a new slashcommand
+### Create a new slashcommand
 
 ```javascript
 const {
@@ -36,7 +32,7 @@ new Slashcommand()
    .register();
 ```
 
-## Fetch slashcommands
+### Fetch slashcommands
 
 ```javascript
 const {
@@ -53,7 +49,7 @@ const guildSlashCommands = await fetchGuildSlashcommands();
 const slashCommands = await fetchSlashcommands();
 ```
 
-## Delete slashcommands
+### Delete slashcommands
 
 ```javascript
 const {
@@ -86,7 +82,7 @@ deleteSlashcommand({
 });
 ```
 
-## Respond Example
+### Respond Example
 
 ```javascript
 bot.on('interactionCreate', async (interaction) => {
@@ -98,20 +94,20 @@ bot.on('interactionCreate', async (interaction) => {
 });
 ```
 
-## Need help?
+### Need help?
 
-### [Discord Server](https://discord.gg/M6Tf9b2Tvt)
+#### [Discord Server](https://discord.gg/M6Tf9b2Tvt)
 
-# WARNING
+## WARNING
 
-## Discord takes a lot of time to create or update a slashcommand. So be patient if you add one.
+### Discord takes a lot of time to create or update a slashcommand. So be patient if you add one.
 
-## Guild slashcommands should update directly
+### Guild slashcommands should update directly
 
-## Also you need to invite your bot with the `application.commands` permission:
+### Also you need to invite your bot with the `application.commands` permission:
 
-#### https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=0scope=applications.commands%20bot
+**https://discord.com/api/oauth2/authorize?client\_id=YOUR\_CLIENT\_ID\&permissions=0scope=applications.commands%20bot**
 
-## License
+### License
 
 [ISC](https://choosealicense.com/licenses/isc/)
