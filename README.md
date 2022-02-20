@@ -34,6 +34,112 @@ new Slashcommand()
    .register();
 ```
 
+### Create a new slashcommand with options
+
+```js
+// create a guild slashcommand with options
+const {
+   GuildSlashCommand,
+   Slash,
+   SlashcommandOption,
+} = require('@mxgnus/slashcommands.js');
+
+new Slash(bot /* your discord.js client */); // initialize the slash command
+
+const nameOption = new SlashcommandOption()
+   .setName('name')
+   .setDescription('Name')
+   .setType('STRING')
+   .setRequired(true);
+
+new GuildSlashCommand()
+   .setGuildId('your guild id')
+   .setName('name')
+   .setDescription('Enter your name')
+   .addOption(nameOption)
+   .register();
+
+// create a global slashcommand with options
+const {
+   SlashCommand,
+   Slash,
+   SlashcommandOption,
+} = require('@mxgnus/slashcommands.js');
+
+const nameOption = new SlashcommandOption()
+   .setName('name')
+   .setDescription('Name')
+   .setType('STRING')
+   .setRequired(true);
+
+new SlashCommand()
+   .setName('name')
+   .setDescription('Enter your name')
+   .addOption(nameOption)
+   .register();
+```
+
+### Create a new slashcommand with options and choices
+
+```js
+// create a guild slashcommand with options and choices
+const {
+   GuildSlashCommand,
+   Slash,
+   SlashcommandOption,
+   SlashCommandOptionChoice,
+} = require('@mxgnus/slashcommands.js');
+
+new Slash(bot /* your discord.js client */); // initialize the slash command
+
+const nameChoice1 = new SlashCommandOptionChoice()
+   .setName('name1')
+   .setDescription('Name 1');
+const nameChoice2 = new SlashCommandOptionChoice()
+   .setName('name2')
+   .setDescription('Name 2');
+const nameOption = new SlashcommandOption()
+   .setName('name')
+   .setDescription('Name')
+   .setType('STRING')
+   .setRequired(true)
+   .setChoices([nameChoice1, nameChoice2]);
+
+new GuildSlashCommand()
+   .setGuildId('your guild id')
+   .setName('name')
+   .setDescription('Enter your name')
+   .addOption(nameOption)
+   .register();
+
+// create a global slashcommand with options and choices
+const {
+   SlashCommand,
+   Slash,
+   SlashcommandOption,
+   SlashCommandOptionChoice,
+} = require('@mxgnus/slashcommands.js');
+
+const nameChoice1 = new SlashCommandOptionChoice()
+   .setName('name1')
+   .setDescription('Name 1');
+const nameChoice2 = new SlashCommandOptionChoice()
+   .setName('name2')
+   .setDescription('Name 2');
+const nameOption = new SlashcommandOption()
+   .setName('name')
+   .setDescription('Name')
+   .setType('STRING')
+   .setRequired(true)
+   .setChoices([nameChoice1, nameChoice2]);
+
+new SlashCommand()
+   .setName('name')
+   .setDescription('Enter your name')
+   .addOption(nameOption)
+   .register();
+```
+
 ### Fetch slashcommands
 
 ```javascript
@@ -84,7 +190,7 @@ deleteSlashcommand({
 });
 ```
 
-### Respond Example
+### Respond to a slashcommand
 
 ```javascript
 bot.on('interactionCreate', async (interaction) => {

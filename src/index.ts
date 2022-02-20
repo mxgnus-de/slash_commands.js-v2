@@ -1,6 +1,18 @@
-import { ApplicationCommandOptionData, Client } from 'discord.js';
+import {
+   ApplicationCommandOptionData,
+   Client,
+   CommandOptionChannelResolvableType,
+   CommandOptionChoiceResolvableType,
+   CommandOptionNonChoiceResolvableType,
+   CommandOptionNumericResolvableType,
+   ExcludeEnum,
+} from 'discord.js';
 import { EventEmitter } from 'events';
 import colors from 'colors';
+import {
+   ApplicationCommandOptionTypes,
+   ChannelTypes,
+} from 'discord.js/typings/enums';
 
 interface Options {
    debug?: boolean;
@@ -14,8 +26,24 @@ const options: Options = {
    guildId: undefined,
 };
 
+type SlashcommandOptionType =
+   | 'STRING'
+   | 'NUMBER'
+   | 'INTEGER'
+   | ApplicationCommandOptionTypes.STRING
+   | ApplicationCommandOptionTypes.NUMBER
+   | ApplicationCommandOptionTypes.INTEGER
+   | CommandOptionChannelResolvableType
+   | CommandOptionChoiceResolvableType
+   | CommandOptionNumericResolvableType
+   | 'SUB_COMMAND_GROUP'
+   | ApplicationCommandOptionTypes.SUB_COMMAND_GROUP
+   | 'SUB_COMMAND'
+   | ApplicationCommandOptionTypes.SUB_COMMAND
+   | CommandOptionNonChoiceResolvableType;
+
 export class Slash {
-   private client: Client;
+   protected client: Client;
 
    constructor(client: Client, clientOptions: Options = {}) {
       this.client = client;
@@ -69,12 +97,23 @@ export class GuildSlashCommand {
    }
 
    public setOptions(options: ApplicationCommandOptionData[]) {
+      if (!validateOptions(this.options)) {
+         throw new Error(
+            'Invalid options, slashcommand option must have a name, type and description',
+         );
+      }
       this.options = formatOptions(options);
+
       return this;
    }
 
    public setType(type: string) {
       this.type = type;
+      return this;
+   }
+
+   public addOption(option: ApplicationCommandOptionData) {
+      this.options.push(option);
       return this;
    }
 
@@ -111,7 +150,7 @@ export class GuildSlashCommand {
 
       let err = null;
       debugLogger(
-         `Registering slash command ${this.name} in guild ${guild.name} (${guild.id})`,
+         `Registering slash command ${this.name} in guild ${guild.id}`,
       );
       const slashcommand = await guild.commands
          .create({
@@ -157,12 +196,22 @@ export class Slashcommand {
    }
 
    public setOptions(options: ApplicationCommandOptionData[]) {
+      if (!validateOptions(this.options)) {
+         throw new Error(
+            'Invalid options, slashcommand option must have a name, type and description',
+         );
+      }
       this.options = formatOptions(options);
       return this;
    }
 
    public setType(type: string) {
       this.type = type;
+      return this;
+   }
+
+   public addOption(option: ApplicationCommandOptionData) {
+      this.options.push(option);
       return this;
    }
 
@@ -210,6 +259,93 @@ export class Slashcommand {
       if (!slashcommand || err) return;
 
       return slashcommand;
+   }
+}
+
+export class SlashCommandOptionChoice {
+   protected name: string | number | boolean | null = null;
+   protected value: string | number | boolean | null = null;
+   constructor() {
+      return this;
+   }
+
+   public setName(name: string | number | boolean) {
+      validateChoiceName(name);
+      this.name = name;
+      return this;
+   }
+
+   public setValue(value: string | number | boolean) {
+      validateChoiceValue(value);
+      this.value = value;
+      return this;
+   }
+}
+export class SlashcommandOption {
+   protected name: string | null = null;
+   protected description: string | null = null;
+   protected type: SlashcommandOptionType | null = null;
+   protected required: boolean = false;
+   protected autocomplete: boolean = false;
+   protected channelTypes?: ExcludeEnum<typeof ChannelTypes, 'UNKNOWN'>[];
+   protected maxValues?: number;
+   protected minValue?: number;
+   protected choices?: SlashCommandOptionChoice[];
+
+   constructor() {
+      return this;
+   }
+
+   public setName(name: string) {
+      validateName(name);
+      this.name = name.toLowerCase();
+      return this;
+   }
+
+   public setDescription(description: string) {
+      validateDescription(description);
+      this.description = description;
+      return this;
+   }
+
+   public setType(type: SlashcommandOptionType) {
+      this.type = type;
+      return this;
+   }
+
+   public setRequired(required: boolean) {
+      if (typeof required !== 'boolean') {
+         throw new Error('Required must be a boolean');
+      }
+      this.required = required;
+      return this;
+   }
+
+   public setAutocomplete(autocomplete: boolean) {
+      this.autocomplete = autocomplete;
+      return this;
+   }
+
+   public setChannelTypes(
+      channelTypes: ExcludeEnum<typeof ChannelTypes, 'UNKNOWN'>[],
+   ) {
+      this.channelTypes = channelTypes;
+      return this;
+   }
+
+   public setMaxValues(maxValues: number) {
+      this.maxValues = maxValues;
+      return this;
+   }
+
+   public setMinValue(minValue: number) {
+      this.minValue = minValue;
+      return this;
+   }
+
+   public setChoices(choices: SlashCommandOptionChoice[]) {
+      this.choices = choices;
+      return this;
    }
 }
 
@@ -410,12 +546,14 @@ function isInit(): boolean {
 }
 
 function validateGuildId(guildId: string) {
+   if (typeof guildId !== 'string') throw new Error('GuildId must be a string');
    if (!/^[0-9]{17,18}$/.test(guildId)) {
       throw new Error('Invalid guild ID');
    }
 }
 
 function validateName(name: string) {
+   if (typeof name !== 'string') throw new Error('Name must be a string');
    if (name.length > 32)
       throw new Error('Name has to be less than 32 characters');
    if (name.length < 1)
@@ -426,6 +564,8 @@ function validateName(name: string) {
 }
 
 function validateDescription(description: string) {
+   if (typeof description !== 'string')
+      throw new Error('Description must be a string');
    if (description.length > 100)
       throw new Error('Description has to be less than 100 characters');
    if (description.length < 1)
@@ -437,7 +577,7 @@ function formatOptions(options: ApplicationCommandOptionData[]) {
    return options.map((option) => {
       return {
          ...option,
-         name: option.name.toLowerCase(),
+         name: option.name?.toLowerCase(),
       };
    });
 }
@@ -463,4 +603,21 @@ function debugLogger(message: string) {
          ),
       );
    }
+}
+
+function validateChoiceName(name: string | number | boolean) {
+   if (typeof name !== 'string') throw new Error('Name must be a string');
+   if (name.length > 100)
+      throw new Error('Choice name has to be less than 100 characters');
+   if (name.length < 1)
+      throw new Error('Choice name has to be more than 1 characters');
+   return;
+}
+
+function validateChoiceValue(value: string | number | boolean) {
+   if (value.toString().length > 100)
+      throw new Error('Choice value has to be less than 100 characters');
+   if (value.toString().length < 1)
+      throw new Error('Choice value has to be more than 1 characters');
+   return;
 }
