@@ -36,7 +36,7 @@ new Slashcommand()
 
 ### Create a new slashcommand with options
 
-```js
+```javascript
 // create a guild slashcommand with options
 const {
    GuildSlashCommand,
@@ -81,7 +81,7 @@ new SlashCommand()
 
 ### Create a new slashcommand with options and choices
 
-```js
+```javascript
 // create a guild slashcommand with options and choices
 const {
    GuildSlashCommand,
