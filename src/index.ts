@@ -535,6 +535,92 @@ export async function deleteSlashcommand({
    return slashcommand;
 }
 
+export async function deleteAllGuildSlashcommands(
+   {
+      guildId,
+   }: {
+      guildId: string;
+   } = {
+      guildId: '',
+   },
+) {
+   if (!isInit()) {
+      throw new Error('Slash command not initialized');
+   }
+   if (options.guildId) guildId = options.guildId;
+   if (!guildId) {
+      throw new Error('Guild ID is not set');
+   }
+   validateGuildId(guildId);
+
+   if (!isReady()) {
+      await new Promise((resolve) => {
+         emitter.once('ready', () => {
+            resolve(null);
+         });
+      });
+   }
+
+   debugLogger(`Deleting all slash commands for guild ${guildId}`);
+   let err = false;
+   const guild =
+      that.guilds.cache.get(guildId) || (await that.guilds.fetch(guildId));
+   if (!guild) {
+      throw new Error('Guild not found');
+   }
+
+   const slashcommands = await guild.commands.fetch().catch((e) => {
+      err = true;
+      throw e;
+   });
+
+   if (err || !slashcommands) return;
+
+   const deleted = await Promise.all(
+      slashcommands.map((c) => guild.commands.delete(c.id)),
+   );
+
+   return deleted;
+}
+
+export async function deleteAllSlashcommands() {
+   if (!isInit()) {
+      throw new Error('Slash command not initialized');
+   }
+
+   if (!isReady()) {
+      await new Promise((resolve) => {
+         emitter.once('ready', () => {
+            resolve(null);
+         });
+      });
+   }
+
+   if (!that.application) {
+      throw new Error('Application in client not found');
+   }
+
+   debugLogger(
+      `Deleting all slash commands for application ${that.application.name} (${that.application.id})`,
+   );
+   let err = false;
+   const slashcommands = await that.application.commands.fetch().catch((e) => {
+      err = true;
+      throw e;
+   });
+
+   if (err || !slashcommands) return;
+
+   const deleted = await Promise.all(
+      slashcommands.map((c) => {
+         if (!that.application) return;
+         that.application.commands.delete(c.id);
+      }),
+   );
+
+   return deleted;
+}
+
 function validateOptions(options: ApplicationCommandOptionData[]): boolean {
    return options.every((option) => {
       return option.name && option.description && option.type;
