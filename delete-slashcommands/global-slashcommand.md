@@ -27,3 +27,15 @@ deleteSlashcommand({
    id: 'command id',
 });
 ```
+
+Delete all global slashcommands
+
+```javascript
+const {
+   deleteAllSlashcommands,
+   Slash,
+} = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
+
+deleteAllSlashcommands()
+```

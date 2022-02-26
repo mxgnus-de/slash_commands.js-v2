@@ -31,3 +31,17 @@ deleteGuildSlashcommand({
 });
 ```
 
+Delete all guild slashcommands
+
+```javascript
+const {
+   deleteAllGuildSlashcommands,
+   Slash,
+} = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
+
+deleteAllGuildSlashcommands({
+   guildId: 'your guild id'
+});
+```
+

@@ -190,6 +190,25 @@ deleteSlashcommand({
 });
 ```
 
+### Delete all slashcommands
+
+```javascript
+const {
+   deleteAllGuildSlashcommands,
+   deleteAllSlashcommands,
+   Slash,
+} = require('@mxgnus/slashcommands.js');
+new Slash(bot /* your discord.js client */); // initialize the slash command
+
+// Delete all guild slashcommands
+deleteAllGuildSlashcommands({
+   guildId: 'your guild id'
+});
+
+// Delete all global slashcommands
+deleteAllSlashcommands()
+```
+
 ### Respond to a slashcommand
 
 ```javascript
