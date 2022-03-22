@@ -134,11 +134,7 @@ export class GuildSlashCommand {
       }
 
       if (!isReady()) {
-         await new Promise((resolve) => {
-            emitter.once('ready', () => {
-               resolve(null);
-            });
-         });
+         await waitForReady();
       }
 
       const guild =
@@ -229,11 +225,7 @@ export class Slashcommand {
       }
 
       if (!isReady()) {
-         await new Promise((resolve) => {
-            emitter.once('ready', () => {
-               resolve(null);
-            });
-         });
+         await waitForReady();
       }
 
       if (!that.application) {
@@ -364,11 +356,7 @@ export async function fetchGuildSlashcommands(
    validateGuildId(guildId);
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    debugLogger(`Fetching slash commands for guild ${guildId}`);
@@ -395,11 +383,7 @@ export async function fetchSlashcommands() {
    }
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    if (!that.application) {
@@ -447,11 +431,7 @@ export async function deleteGuildSlashcommand(
    }
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    let cmdId = id;
@@ -496,11 +476,7 @@ export async function deleteSlashcommand({
    }
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    if (!that.application) {
@@ -554,11 +530,7 @@ export async function deleteAllGuildSlashcommands(
    validateGuildId(guildId);
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    debugLogger(`Deleting all slash commands for guild ${guildId}`);
@@ -589,11 +561,7 @@ export async function deleteAllSlashcommands() {
    }
 
    if (!isReady()) {
-      await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
-      });
+      await waitForReady();
    }
 
    if (!that.application) {
@@ -706,4 +674,16 @@ function validateChoiceValue(value: string | number | boolean) {
    if (value.toString().length < 1)
       throw new Error('Choice value has to be more than 1 characters');
    return;
+}
+
+async function waitForReady() {
+   if (!isReady()) {
+      await new Promise((resolve) => {
+         emitter.once('ready', () => {
+            resolve(null);
+         });
+      });
+   } else {
+      return;
+   }
 }
