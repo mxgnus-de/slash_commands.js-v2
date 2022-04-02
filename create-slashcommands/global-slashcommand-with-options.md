@@ -3,7 +3,7 @@
 ```javascript
 // create a global slashcommand with options
 const {
-   SlashCommand,
+   Slashcommand,
    Slash,
    SlashcommandOption,
 } = require('@mxgnus/slashcommands.js');
@@ -14,7 +14,7 @@ const nameOption = new SlashcommandOption()
    .setType('STRING')
    .setRequired(true);
 
-new SlashCommand()
+new Slashcommand()
    .setName('name')
    .setDescription('Enter your name')
    .addOption(nameOption)

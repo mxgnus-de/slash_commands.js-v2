@@ -2,7 +2,7 @@
 
 ```javascript
 const {
-   SlashCommand,
+   Slashcommand,
    Slash,
    SlashcommandOption,
    SlashCommandOptionChoice,
@@ -21,7 +21,7 @@ const nameOption = new SlashcommandOption()
    .setRequired(true)
    .setChoices([nameChoice1, nameChoice2]);
 
-new SlashCommand()
+new Slashcommand()
    .setName('name')
    .setDescription('Enter your name')
    .addOption(nameOption)
