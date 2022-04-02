@@ -42,7 +42,7 @@ type SlashcommandOptionType =
    | ApplicationCommandOptionTypes.SUB_COMMAND
    | CommandOptionNonChoiceResolvableType;
 
-export class Slash {
+class Slash {
    protected client: Client;
 
    constructor(client: Client, clientOptions: Options = {}) {
@@ -63,7 +63,7 @@ export class Slash {
    }
 }
 
-export class GuildSlashCommand {
+class GuildSlashCommand {
    protected name: string | null = null;
    protected description: string | null = null;
    protected options: ApplicationCommandOptionData[] = [];
@@ -166,7 +166,7 @@ export class GuildSlashCommand {
    }
 }
 
-export class Slashcommand {
+class Slashcommand {
    protected name: string | null = null;
    protected description: string | null = null;
    protected type: string | null = null;
@@ -254,7 +254,7 @@ export class Slashcommand {
    }
 }
 
-export class SlashCommandOptionChoice {
+class SlashCommandOptionChoice {
    protected name: string | number | boolean | null = null;
    protected value: string | number | boolean | null = null;
    constructor() {
@@ -273,7 +273,7 @@ export class SlashCommandOptionChoice {
       return this;
    }
 }
-export class SlashcommandOption {
+class SlashcommandOption {
    protected name: string | null = null;
    protected description: string | null = null;
    protected type: SlashcommandOptionType | null = null;
@@ -341,7 +341,7 @@ export class SlashcommandOption {
    }
 }
 
-export async function fetchGuildSlashcommands(
+async function fetchGuildSlashcommands(
    { guildId }: { guildId: string } = {
       guildId: '',
    },
@@ -377,7 +377,7 @@ export async function fetchGuildSlashcommands(
    return slashcommands;
 }
 
-export async function fetchSlashcommands() {
+async function fetchSlashcommands() {
    if (!isInit()) {
       throw new Error('Slash command not initialized');
    }
@@ -404,7 +404,7 @@ export async function fetchSlashcommands() {
    return slashcommands;
 }
 
-export async function deleteGuildSlashcommand(
+async function deleteGuildSlashcommand(
    {
       guildId,
       name,
@@ -463,7 +463,7 @@ export async function deleteGuildSlashcommand(
    return slashcommand;
 }
 
-export async function deleteSlashcommand({
+async function deleteSlashcommand({
    name,
    id,
 }: { name?: string; id?: string } = {}) {
@@ -511,7 +511,7 @@ export async function deleteSlashcommand({
    return slashcommand;
 }
 
-export async function deleteAllGuildSlashcommands(
+async function deleteAllGuildSlashcommands(
    {
       guildId,
    }: {
@@ -555,7 +555,7 @@ export async function deleteAllGuildSlashcommands(
    return deleted;
 }
 
-export async function deleteAllSlashcommands() {
+async function deleteAllSlashcommands() {
    if (!isInit()) {
       throw new Error('Slash command not initialized');
    }
@@ -679,11 +679,28 @@ function validateChoiceValue(value: string | number | boolean) {
 async function waitForReady() {
    if (!isReady()) {
       await new Promise((resolve) => {
-         emitter.once('ready', () => {
-            resolve(null);
-         });
+         const interval = setInterval(() => {
+            if (isReady()) {
+               clearInterval(interval);
+               resolve(null);
+            }
+         }, 500);
       });
    } else {
       return;
    }
 }
+
+export {
+   Slash,
+   Slashcommand,
+   SlashcommandOption,
+   SlashCommandOptionChoice,
+   GuildSlashCommand,
+   fetchGuildSlashcommands,
+   fetchSlashcommands,
+   deleteGuildSlashcommand,
+   deleteSlashcommand,
+   deleteAllGuildSlashcommands,
+   deleteAllSlashcommands,
+};
