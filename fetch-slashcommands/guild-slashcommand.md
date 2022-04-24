@@ -7,5 +7,7 @@ const {
 } = require('@mxgnus/slashcommands.js');
 new Slash(bot /* your discord.js client */); // initialize the slash command
 
-const guildSlashCommands = await fetchGuildSlashcommands();
+const guildSlashCommands = await fetchGuildSlashcommands({
+   guildId: 'your guild id'
+});
 ```
