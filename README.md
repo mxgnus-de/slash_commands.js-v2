@@ -1,4 +1,4 @@
-# 🚀 Getting started
+# Getting started
 
 ## [📝 Documentation](https://slashcommands.mxgnus.de)
 
@@ -94,10 +94,10 @@ new Slash(bot /* your discord.js client */); // initialize the slash command
 
 const nameChoice1 = new SlashCommandOptionChoice()
    .setName('name1')
-   .setDescription('Name 1');
+   .setValue('Name 1');
 const nameChoice2 = new SlashCommandOptionChoice()
    .setName('name2')
-   .setDescription('Name 2');
+   .setValue('Name 2');
 const nameOption = new SlashcommandOption()
    .setName('name')
    .setDescription('Name')
@@ -122,10 +122,10 @@ const {
 
 const nameChoice1 = new SlashCommandOptionChoice()
    .setName('name1')
-   .setDescription('Name 1');
+   .setValue('Name 1');
 const nameChoice2 = new SlashCommandOptionChoice()
    .setName('name2')
-   .setDescription('Name 2');
+   .setValue('Name 2');
 const nameOption = new SlashcommandOption()
    .setName('name')
    .setDescription('Name')
