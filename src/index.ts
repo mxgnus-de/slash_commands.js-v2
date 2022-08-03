@@ -43,11 +43,21 @@ type SlashcommandOptionType =
    | CommandOptionNonChoiceResolvableType;
 
 class Slash {
-   protected client: Client;
+   public client: Client;
+
+   public GuildSlashCommand = GuildSlashCommand;
+   public fetchGuildSlashcommands = fetchGuildSlashcommands;
+   public deleteGuildSlashcommand = deleteGuildSlashcommand;
+   public deleteAllGuildSlashcommands = deleteAllGuildSlashcommands;
+   public Slashcommand = Slashcommand;
+   public fetchSlashcommands = fetchSlashcommands;
+   public deleteSlashcommand = deleteSlashcommand;
+   public deleteAllSlashcommands = deleteAllSlashcommands;
 
    constructor(client: Client, clientOptions: Options = {}) {
       this.client = client;
       that = client;
+
       if (clientOptions.debug) options.debug = clientOptions.debug;
       if (clientOptions.guildId) {
          validateGuildId(clientOptions.guildId);
@@ -60,6 +70,7 @@ class Slash {
             emitter.emit('ready');
          });
       }
+      return this;
    }
 }
 
@@ -601,7 +612,7 @@ function isInit(): boolean {
 
 function validateGuildId(guildId: string) {
    if (typeof guildId !== 'string') throw new Error('GuildId must be a string');
-   if (!/^[0-9]{17,18}$/.test(guildId)) {
+   if (!/^[0-9]{17,19}$/.test(guildId)) {
       throw new Error('Invalid guild ID');
    }
 }
