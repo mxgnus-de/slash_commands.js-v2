@@ -6,7 +6,8 @@
    "types": "lib/index.d.ts",
    "dependencies": {
       "colors": "^1.4.0",
-      "discord.js": "^13.6.0"
+      "discord-api-types": "^0.37.4",
+      "discord.js": "^13.10.3"
    },
    "devDependencies": {
       "@types/colors": "^1.2.1",

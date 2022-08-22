@@ -6,6 +6,7 @@ import {
    CommandOptionNonChoiceResolvableType,
    CommandOptionNumericResolvableType,
    ExcludeEnum,
+   PermissionResolvable,
 } from 'discord.js';
 import { EventEmitter } from 'events';
 import colors from 'colors';
@@ -13,6 +14,7 @@ import {
    ApplicationCommandOptionTypes,
    ChannelTypes,
 } from 'discord.js/typings/enums';
+import { LocalizationMap } from 'discord-api-types/payloads/common';
 
 interface Options {
    debug?: boolean;
@@ -80,6 +82,10 @@ class GuildSlashCommand {
    protected options: ApplicationCommandOptionData[] = [];
    protected guildId: string | null = null;
    protected type: string | null = null;
+   protected dmPermission: boolean | null = null;
+   protected nameLocalizations: LocalizationMap | null = null;
+   protected descriptionLocalizations: LocalizationMap | null = null;
+   protected defaultMemberPermissions: PermissionResolvable | null = null;
 
    constructor() {
       if (!isInit()) {
@@ -128,6 +134,35 @@ class GuildSlashCommand {
       return this;
    }
 
+   public setDmPermission(dmPermission: boolean) {
+      this.dmPermission = dmPermission;
+
+      if (typeof this.dmPermission !== 'boolean') {
+         throw new Error('DM permission must be a boolean');
+      }
+
+      return this;
+   }
+
+   public setNameLocalizations(nameLocalizations: LocalizationMap) {
+      this.nameLocalizations = nameLocalizations;
+      return this;
+   }
+
+   public setDescriptionLocalizations(
+      descriptionLocalizations: LocalizationMap,
+   ) {
+      this.descriptionLocalizations = descriptionLocalizations;
+      return this;
+   }
+
+   public setDefaultMemberPermissions(
+      defaultMemberPermissions: PermissionResolvable,
+   ) {
+      this.defaultMemberPermissions = defaultMemberPermissions;
+      return this;
+   }
+
    public async register() {
       if (!this.name) {
          throw new Error('Name is not set');
@@ -164,6 +199,12 @@ class GuildSlashCommand {
             name: this.name,
             description: this.description,
             options: this.options,
+            dmPermission: this.dmPermission ?? undefined,
+            nameLocalizations: this.nameLocalizations ?? undefined,
+            descriptionLocalizations:
+               this.descriptionLocalizations ?? undefined,
+            defaultMemberPermissions:
+               this.defaultMemberPermissions ?? undefined,
          })
          .catch((e) => {
             err = e;
@@ -182,6 +223,10 @@ class Slashcommand {
    protected description: string | null = null;
    protected type: string | null = null;
    protected options: ApplicationCommandOptionData[] = [];
+   protected dmPermission: boolean | null = null;
+   protected nameLocalizations: LocalizationMap | null = null;
+   protected descriptionLocalizations: LocalizationMap | null = null;
+   protected defaultMemberPermissions: PermissionResolvable | null = null;
 
    constructor() {
       if (!isInit()) {
@@ -222,6 +267,35 @@ class Slashcommand {
       return this;
    }
 
+   public setDmPermission(dmPermission: boolean) {
+      this.dmPermission = dmPermission;
+
+      if (typeof this.dmPermission !== 'boolean') {
+         throw new Error('DM permission must be a boolean');
+      }
+
+      return this;
+   }
+
+   public setNameLocalizations(nameLocalizations: LocalizationMap) {
+      this.nameLocalizations = nameLocalizations;
+      return this;
+   }
+
+   public setDescriptionLocalizations(
+      descriptionLocalizations: LocalizationMap,
+   ) {
+      this.descriptionLocalizations = descriptionLocalizations;
+      return this;
+   }
+
+   public setDefaultMemberPermissions(
+      defaultMemberPermissions: PermissionResolvable,
+   ) {
+      this.defaultMemberPermissions = defaultMemberPermissions;
+      return this;
+   }
+
    public async register() {
       if (!this.name) {
          throw new Error('Name is not set');
@@ -253,6 +327,12 @@ class Slashcommand {
             description: this.description,
             options: this.options,
             type: (this.type as any) ?? undefined,
+            dmPermission: this.dmPermission ?? undefined,
+            nameLocalizations: this.nameLocalizations ?? undefined,
+            descriptionLocalizations:
+               this.descriptionLocalizations ?? undefined,
+            defaultMemberPermissions:
+               this.defaultMemberPermissions ?? undefined,
          })
          .catch((e) => {
             err = true;
@@ -607,7 +687,7 @@ function validateOptions(options: ApplicationCommandOptionData[]): boolean {
 }
 
 function isInit(): boolean {
-   return that instanceof Client;
+   return !!that;
 }
 
 function validateGuildId(guildId: string) {
