@@ -1,7 +1,7 @@
 {
    "name": "@mxgnus/slashcommands.js",
-   "version": "2.2.2",
-   "description": "A simple discord.js v13 slash command package",
+   "version": "2.3.0",
+   "description": "A simple discord.js v13 & v14 slash command package",
    "main": "lib/index.js",
    "types": "lib/index.d.ts",
    "dependencies": {
