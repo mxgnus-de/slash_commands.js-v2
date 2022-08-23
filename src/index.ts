@@ -687,7 +687,7 @@ function validateOptions(options: ApplicationCommandOptionData[]): boolean {
 }
 
 function isInit(): boolean {
-   return !!that;
+   return that instanceof Client;
 }
 
 function validateGuildId(guildId: string) {

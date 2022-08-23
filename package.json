@@ -1,6 +1,6 @@
 {
    "name": "@mxgnus/slashcommands.js",
-   "version": "2.3.0",
+   "version": "2.3.1",
    "description": "A simple discord.js v13 & v14 slash command package",
    "main": "lib/index.js",
    "types": "lib/index.d.ts",
@@ -20,7 +20,7 @@
       "lint": "tslint -p tsconfig.json",
       "prepare": "npm run build",
       "version": "git add -A src",
-      "postversion": "git push --set-upstream origin master && git push --tags",
+      "postversion": "git push --set-upstream origin v13 && git push --tags",
       "build": "tsc -p tsconfig.json"
    },
    "repository": {
