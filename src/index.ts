@@ -5,10 +5,10 @@ import {
    ChannelType,
    Client,
    PermissionResolvable,
-} from 'discord.js';
-import { EventEmitter } from 'events';
-import colors from 'colors';
-import { LocalizationMap } from 'discord-api-types/payloads/common';
+} from "discord.js";
+import { EventEmitter } from "events";
+import colors from "colors";
+import { LocalizationMap } from "discord-api-types/payloads/common";
 
 interface Options {
    debug?: boolean;
@@ -22,7 +22,22 @@ const options: Options = {
    guildId: undefined,
 };
 
-type SlashcommandOptionType = ApplicationCommandOptionType;
+type SlashcommandOptionTypeString =
+   | "Subcommand"
+   | "SubcommandGroup"
+   | "String"
+   | "Integer"
+   | "Boolean"
+   | "User"
+   | "Channel"
+   | "Role"
+   | "Mentionable"
+   | "Number"
+   | "Attachment";
+
+type SlashcommandOptionType =
+   | SlashcommandOptionTypeString
+   | ApplicationCommandOptionType;
 
 type SlashcommandChannelType = ChannelType;
 
@@ -56,8 +71,8 @@ class Slash {
       debugLogger(`Slash initialized.`);
 
       if (!isReady()) {
-         client.on('ready', () => {
-            emitter.emit('ready');
+         client.on("ready", () => {
+            emitter.emit("ready");
          });
       }
       return this;
@@ -81,7 +96,7 @@ class GuildSlashCommand {
     */
    constructor() {
       if (!isInit()) {
-         throw new Error('Slash command not initialized');
+         throw new Error("Slash command not initialized");
       }
       if (options.guildId) this.guildId = options.guildId;
       return this;
@@ -134,7 +149,7 @@ class GuildSlashCommand {
    ) {
       if (!validateOptions(this.options)) {
          throw new Error(
-            'Invalid options, slashcommand option must have a name, type and description',
+            "Invalid options, slashcommand option must have a name, type and description",
          );
       }
       this.options = formatOptions(options);
@@ -160,8 +175,8 @@ class GuildSlashCommand {
    public setDmPermission(dmPermission: boolean) {
       this.dmPermission = dmPermission;
 
-      if (typeof this.dmPermission !== 'boolean') {
-         throw new Error('DM permission must be a boolean');
+      if (typeof this.dmPermission !== "boolean") {
+         throw new Error("DM permission must be a boolean");
       }
 
       return this;
@@ -209,17 +224,17 @@ class GuildSlashCommand {
     */
    public async register() {
       if (!this.name) {
-         throw new Error('Name is not set');
+         throw new Error("Name is not set");
       }
       if (!this.description) {
-         throw new Error('Description is not set');
+         throw new Error("Description is not set");
       }
       if (!this.guildId) {
-         throw new Error('Guild ID is not set');
+         throw new Error("Guild ID is not set");
       }
       if (!validateOptions(this.options)) {
          throw new Error(
-            'Invalid options, slashcommand option must have a name, type and description',
+            "Invalid options, slashcommand option must have a name, type and description",
          );
       }
 
@@ -231,7 +246,7 @@ class GuildSlashCommand {
          that.guilds.cache.get(this.guildId) ||
          (await that.guilds.fetch(this.guildId));
       if (!guild) {
-         throw new Error('Guild not found');
+         throw new Error("Guild not found");
       }
 
       let err = null;
@@ -277,7 +292,7 @@ class Slashcommand {
     */
    constructor() {
       if (!isInit()) {
-         throw new Error('Slash command not initialized');
+         throw new Error("Slash command not initialized");
       }
       return this;
    }
@@ -317,7 +332,7 @@ class Slashcommand {
    ) {
       if (!validateOptions(this.options)) {
          throw new Error(
-            'Invalid options, slashcommand option must have a name, type and description',
+            "Invalid options, slashcommand option must have a name, type and description",
          );
       }
       this.options = formatOptions(options);
@@ -343,8 +358,8 @@ class Slashcommand {
    public setDmPermission(dmPermission: boolean) {
       this.dmPermission = dmPermission;
 
-      if (typeof this.dmPermission !== 'boolean') {
-         throw new Error('DM permission must be a boolean');
+      if (typeof this.dmPermission !== "boolean") {
+         throw new Error("DM permission must be a boolean");
       }
 
       return this;
@@ -392,14 +407,14 @@ class Slashcommand {
     */
    public async register() {
       if (!this.name) {
-         throw new Error('Name is not set');
+         throw new Error("Name is not set");
       }
       if (!this.description) {
-         throw new Error('Description is not set');
+         throw new Error("Description is not set");
       }
       if (!validateOptions(this.options)) {
          throw new Error(
-            'Invalid options, slashcommand option must have a name, type and description',
+            "Invalid options, slashcommand option must have a name, type and description",
          );
       }
 
@@ -408,11 +423,13 @@ class Slashcommand {
       }
 
       if (!that.application) {
-         throw new Error('Application in client not found');
+         throw new Error("Application in client not found");
       }
 
       debugLogger(
-         `Registering slash command ${this.name} in application ${that.application.name} (${that.application.id})`,
+         `Registering slash command ${this.name} in application ${
+            that.application.name ? that.application.name : "unknown"
+         } (${that.application.id})`,
       );
       let err = false;
       const slashcommand = await that.application.commands
@@ -489,7 +506,7 @@ class SlashCommandOptionChoice {
 class SlashcommandOption {
    public name: string | null = null;
    public description: string | null = null;
-   public type: SlashcommandOptionType | null = null;
+   public type: ApplicationCommandOptionType | null = null;
    public required: boolean = false;
    public autocomplete: boolean = false;
    public channelTypes?: SlashcommandChannelType[];
@@ -539,7 +556,24 @@ class SlashcommandOption {
     * @returns The object itself.
     */
    public setType(type: SlashcommandOptionType) {
-      this.type = type;
+      if (typeof type === "string") {
+         const formattedType = (type.charAt(0).toUpperCase() +
+            type.slice(1).toLowerCase()) as SlashcommandOptionTypeString;
+
+         const applicationCommandType =
+            ApplicationCommandOptionType[formattedType];
+
+         console.log(applicationCommandType);
+
+         if (!applicationCommandType) {
+            throw new Error(`Unknown slashcommand option type ${type}`);
+         }
+
+         this.type = applicationCommandType;
+      } else {
+         this.type = type;
+      }
+
       return this;
    }
 
@@ -549,8 +583,8 @@ class SlashcommandOption {
     * @returns The instance of the class.
     */
    public setRequired(required: boolean) {
-      if (typeof required !== 'boolean') {
-         throw new Error('Required must be a boolean');
+      if (typeof required !== "boolean") {
+         throw new Error("Required must be a boolean");
       }
       this.required = required;
       return this;
@@ -662,15 +696,15 @@ class SlashcommandOption {
 
 async function fetchGuildSlashcommands(
    { guildId }: { guildId: string } = {
-      guildId: '',
+      guildId: "",
    },
 ) {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
    if (options.guildId) guildId = options.guildId;
    if (!guildId) {
-      throw new Error('Guild ID is not set');
+      throw new Error("Guild ID is not set");
    }
    validateGuildId(guildId);
 
@@ -683,7 +717,7 @@ async function fetchGuildSlashcommands(
    const guild =
       that.guilds.cache.get(guildId) || (await that.guilds.fetch(guildId));
    if (!guild) {
-      throw new Error('Guild not found');
+      throw new Error("Guild not found");
    }
 
    const slashcommands = await guild.commands.fetch().catch((e) => {
@@ -698,7 +732,7 @@ async function fetchGuildSlashcommands(
 
 async function fetchSlashcommands() {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
 
    if (!isReady()) {
@@ -706,7 +740,7 @@ async function fetchSlashcommands() {
    }
 
    if (!that.application) {
-      throw new Error('Application in client not found');
+      throw new Error("Application in client not found");
    }
 
    debugLogger(
@@ -733,20 +767,20 @@ async function deleteGuildSlashcommand(
       name?: string;
       id?: string;
    } = {
-      guildId: '',
+      guildId: "",
    },
 ) {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
    if (options.guildId) guildId = options.guildId;
    if (!guildId) {
-      throw new Error('Guild ID is not set');
+      throw new Error("Guild ID is not set");
    }
    validateGuildId(guildId);
 
    if (!name && !id) {
-      throw new Error('Name or ID is not set. Please specify one');
+      throw new Error("Name or ID is not set. Please specify one");
    }
 
    if (!isReady()) {
@@ -756,20 +790,20 @@ async function deleteGuildSlashcommand(
    let cmdId = id;
    if (!id && name) {
       const slashcommands = await fetchGuildSlashcommands({ guildId });
-      if (!slashcommands) throw new Error('Invalid slashcommand id');
+      if (!slashcommands) throw new Error("Invalid slashcommand id");
       const slashcommand = slashcommands.find((c) => c.name === name);
-      if (!slashcommand) throw new Error('Invalid slashcommand name');
+      if (!slashcommand) throw new Error("Invalid slashcommand name");
       cmdId = slashcommand.id;
    }
 
-   if (!cmdId) throw new Error('Invalid slashcommand id');
+   if (!cmdId) throw new Error("Invalid slashcommand id");
 
    debugLogger(`Deleting slash command ${cmdId} for guild ${guildId}`);
    let err = false;
    const guild =
       that.guilds.cache.get(guildId) || (await that.guilds.fetch(guildId));
    if (!guild) {
-      throw new Error('Guild not found');
+      throw new Error("Guild not found");
    }
 
    const slashcommand = await guild.commands.delete(cmdId).catch((e) => {
@@ -787,11 +821,11 @@ async function deleteSlashcommand({
    id,
 }: { name?: string; id?: string } = {}) {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
 
    if (!name && !id) {
-      throw new Error('Name or ID is not set. Please specify one');
+      throw new Error("Name or ID is not set. Please specify one");
    }
 
    if (!isReady()) {
@@ -799,20 +833,20 @@ async function deleteSlashcommand({
    }
 
    if (!that.application) {
-      throw new Error('Application in client not found');
+      throw new Error("Application in client not found");
    }
 
    let cmdId = id;
 
    if (!id && name) {
       const slashcommands = await fetchSlashcommands();
-      if (!slashcommands) throw new Error('Invalid slashcommand id');
+      if (!slashcommands) throw new Error("Invalid slashcommand id");
       const slashcommand = slashcommands.find((c) => c.name === name);
-      if (!slashcommand) throw new Error('Invalid slashcommand name');
+      if (!slashcommand) throw new Error("Invalid slashcommand name");
       cmdId = slashcommand.id;
    }
 
-   if (!cmdId) throw new Error('Invalid slashcommand id');
+   if (!cmdId) throw new Error("Invalid slashcommand id");
 
    debugLogger(
       `Deleting slash command ${cmdId} for application ${that.application.name} (${that.application.id})`,
@@ -836,15 +870,15 @@ async function deleteAllGuildSlashcommands(
    }: {
       guildId: string;
    } = {
-      guildId: '',
+      guildId: "",
    },
 ) {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
    if (options.guildId) guildId = options.guildId;
    if (!guildId) {
-      throw new Error('Guild ID is not set');
+      throw new Error("Guild ID is not set");
    }
    validateGuildId(guildId);
 
@@ -857,7 +891,7 @@ async function deleteAllGuildSlashcommands(
    const guild =
       that.guilds.cache.get(guildId) || (await that.guilds.fetch(guildId));
    if (!guild) {
-      throw new Error('Guild not found');
+      throw new Error("Guild not found");
    }
 
    const slashcommands = await guild.commands.fetch().catch((e) => {
@@ -876,7 +910,7 @@ async function deleteAllGuildSlashcommands(
 
 async function deleteAllSlashcommands() {
    if (!isInit()) {
-      throw new Error('Slash command not initialized');
+      throw new Error("Slash command not initialized");
    }
 
    if (!isReady()) {
@@ -884,7 +918,7 @@ async function deleteAllSlashcommands() {
    }
 
    if (!that.application) {
-      throw new Error('Application in client not found');
+      throw new Error("Application in client not found");
    }
 
    debugLogger(
@@ -919,30 +953,30 @@ function isInit(): boolean {
 }
 
 function validateGuildId(guildId: string) {
-   if (typeof guildId !== 'string') throw new Error('GuildId must be a string');
+   if (typeof guildId !== "string") throw new Error("GuildId must be a string");
    if (!/^[0-9]{17,19}$/.test(guildId)) {
-      throw new Error('Invalid guild ID');
+      throw new Error("Invalid guild ID");
    }
 }
 
 function validateName(name: string) {
-   if (typeof name !== 'string') throw new Error('Name must be a string');
+   if (typeof name !== "string") throw new Error("Name must be a string");
    if (name.length > 32)
-      throw new Error('Name has to be less than 32 characters');
+      throw new Error("Name has to be less than 32 characters");
    if (name.length < 1)
-      throw new Error('Name has to be more than 1 characters');
+      throw new Error("Name has to be more than 1 characters");
    if (name.match(/[^a-zA-Z0-9_]/g))
-      throw new Error('Name can only contain letters, numbers and underscores');
+      throw new Error("Name can only contain letters, numbers and underscores");
    return;
 }
 
 function validateDescription(description: string) {
-   if (typeof description !== 'string')
-      throw new Error('Description must be a string');
+   if (typeof description !== "string")
+      throw new Error("Description must be a string");
    if (description.length > 100)
-      throw new Error('Description has to be less than 100 characters');
+      throw new Error("Description has to be less than 100 characters");
    if (description.length < 1)
-      throw new Error('Description has to be more than 1 characters');
+      throw new Error("Description has to be more than 1 characters");
    return;
 }
 
@@ -954,11 +988,11 @@ function formatOptions(
    for (const option of options) {
       if (option instanceof SlashcommandOption) {
          if (
-            typeof option.name !== 'string' ||
-            typeof option.description !== 'string' ||
-            typeof option.type !== 'number'
+            typeof option.name !== "string" ||
+            typeof option.description !== "string" ||
+            typeof option.type !== "number"
          ) {
-            throw new Error('Invalid option ' + JSON.stringify(option));
+            throw new Error("Invalid option " + JSON.stringify(option));
          }
 
          if (
@@ -966,7 +1000,7 @@ function formatOptions(
             option.type === ApplicationCommandOptionType.SubcommandGroup
          ) {
             throw new Error(
-               'Subcommand and subcommand group are not supported yet',
+               "Subcommand and subcommand group are not supported yet",
             );
          } else if (
             option.type === ApplicationCommandOptionType.Integer ||
@@ -974,10 +1008,10 @@ function formatOptions(
          ) {
             if (
                option.choices &&
-               !option.choices.every((c) => typeof c.value === 'number')
+               !option.choices.every((c) => typeof c.value === "number")
             ) {
                throw new Error(
-                  'Invalid choices, choice value must be a number! For option ' +
+                  "Invalid choices, choice value must be a number! For option " +
                      JSON.stringify(option),
                );
             }
@@ -1002,10 +1036,10 @@ function formatOptions(
          } else if (option.type === ApplicationCommandOptionType.String) {
             if (
                option.choices &&
-               !option.choices.every((c) => typeof c.value === 'string')
+               !option.choices.every((c) => typeof c.value === "string")
             ) {
                throw new Error(
-                  'Invalid choices, choice value must be a string! For option ' +
+                  "Invalid choices, choice value must be a string! For option " +
                      JSON.stringify(option),
                );
             }
@@ -1065,16 +1099,16 @@ function isReady(): boolean {
 function debugLogger(message: string) {
    if (options.debug) {
       const date = new Date();
-      const time = `${date.getDay().toString().padStart(2, '0')}.${
+      const time = `${date.getDay().toString().padStart(2, "0")}.${
          date.getMonth() + 1
       }.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
       console.debug(
          colors.grey(
-            '[' +
-               colors.blue('DEBUG') +
-               ' | ' +
+            "[" +
+               colors.blue("DEBUG") +
+               " | " +
                colors.blue(time) +
-               '] => ' +
+               "] => " +
                colors.cyan(message),
          ),
       );
@@ -1082,19 +1116,19 @@ function debugLogger(message: string) {
 }
 
 function validateChoiceName(name: string | number | boolean) {
-   if (typeof name !== 'string') throw new Error('Name must be a string');
+   if (typeof name !== "string") throw new Error("Name must be a string");
    if (name.length > 100)
-      throw new Error('Choice name has to be less than 100 characters');
+      throw new Error("Choice name has to be less than 100 characters");
    if (name.length < 1)
-      throw new Error('Choice name has to be more than 1 characters');
+      throw new Error("Choice name has to be more than 1 characters");
    return;
 }
 
 function validateChoiceValue(value: string | number | boolean) {
    if (value.toString().length > 100)
-      throw new Error('Choice value has to be less than 100 characters');
+      throw new Error("Choice value has to be less than 100 characters");
    if (value.toString().length < 1)
-      throw new Error('Choice value has to be more than 1 characters');
+      throw new Error("Choice value has to be more than 1 characters");
    return;
 }
 
