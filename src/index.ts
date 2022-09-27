@@ -563,8 +563,6 @@ class SlashcommandOption {
          const applicationCommandType =
             ApplicationCommandOptionType[formattedType];
 
-         console.log(applicationCommandType);
-
          if (!applicationCommandType) {
             throw new Error(`Unknown slashcommand option type ${type}`);
          }
